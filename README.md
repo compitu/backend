@@ -1,6 +1,7 @@
-# Nestjs Starter
+# Compitu backend
 
 ## Description
+Backend for the compitu todo app.
 
 ## Installation - npm
 
