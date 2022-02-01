@@ -3,7 +3,7 @@ services:
     e2e-db:
         image: mongo:latest
         restart: unless-stopped
-        container_name: nestjs-e2e-db
+        container_name: compitu-e2e-db
         ports:
             - "27018:27017"
         environment:
@@ -11,12 +11,12 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: admin
             MONGO_INITDB_DATABASE: app
         volumes:
-            - nestjs-e2e-db-vol:/data/db
-            - nestjs-e2e-db-vol:/data/configdb
+            - compitu-e2e-db-vol:/data/db
+            - compitu-e2e-db-vol:/data/configdb
             - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/:ro
         networks:
-            - nestjs-e2e-network
+            - compitu-e2e-network
 volumes:
-    nestjs-e2e-db-vol:
+    compitu-e2e-db-vol:
 networks:
-    nestjs-e2e-network:
+    compitu-e2e-network:

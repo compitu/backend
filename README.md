@@ -38,7 +38,7 @@ services:
     db:
         image: mongo:latest
         restart: unless-stopped
-        container_name: nestjs-db
+        container_name: compitu-db
         ports:
             - "27017:27017"
         environment:
@@ -46,16 +46,16 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: admin
             MONGO_INITDB_DATABASE: app
         volumes:
-            - nestjs-db-vol:/data/db
-            - nestjs-db-vol:/data/configdb
+            - compitu-db-vol:/data/db
+            - compitu-db-vol:/data/configdb
             # set up a new user and add roles
             - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/:ro
         networks:
-            - nestjs-network
+            - compitu-network
 volumes:
-    nestjs-db-vol:
+    compitu-db-vol:
 networks:
-    nestjs-network:
+    compitu-network:
 
 ```
 
