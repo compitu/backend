@@ -1,10 +1,10 @@
-import {Body, Controller, Get, Post, Response, UseGuards} from '@nestjs/common';
+import {Body, Controller, Post, Request, UseGuards} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
-import {add} from 'date-fns';
 import {CreateUserDto} from '../users/create-user.dto';
 import {UserResponse} from '../users/user.response';
 import {UsersService} from '../users/users.service';
 import {AuthService} from './auth.service';
+import {JwtRefreshAuthGuard} from './jwt-refresh-auth.guard';
 import {LocalAuthGuard} from './local-auth.guard';
 
 @Controller('auth')
@@ -33,42 +33,17 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     public async login(
-        @Body('email') email: string,
-        @Response({passthrough: true}) res
-    ): Promise<UserResponse> {
+        @Body('email') email: string
+    ): Promise<{access: string; refresh: string}> {
         const user = await this.usersService.findOneByEmail(email);
-        const tokens = await this.authService.generateTokens(
-            user._id.toString()
-        );
-        const accessExp = add(new Date(), {seconds: this.accessExpiresIn});
-        const refreshExp = add(new Date(), {seconds: this.refreshExpiresIn});
-
-        res.cookie('access', tokens.access, {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: true,
-            expires: accessExp,
-        });
-        res.cookie('refresh', tokens.refresh, {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: true,
-            expires: refreshExp,
-        });
-        return new UserResponse(user);
+        return this.authService.generateTokens(user._id.toString());
     }
 
-    @Get('logout')
-    public async logout(@Response({passthrough: true}) res): Promise<void> {
-        res.clearCookie('access', {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: true,
-        });
-        res.clearCookie('refresh', {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: true,
-        });
+    @UseGuards(JwtRefreshAuthGuard)
+    @Post('refresh')
+    public async refresh(
+        @Request() req: {user: {id: string}}
+    ): Promise<{access: string; refresh: string}> {
+        return this.authService.generateTokens(req.user.id);
     }
 }
