@@ -12,6 +12,8 @@
         "start:dev": "nest start --watch",
         "prestart:dev:docker": "npm run docker:up",
         "start:dev:docker": "trap 'npm run docker:down; exit 0' INT; nest start --watch",
+        "prestart:dev:docker:windows": "npm run docker:up",
+        "start:dev:docker:windows": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
