@@ -32,11 +32,22 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    public async login(
-        @Body('email') email: string
-    ): Promise<{access: string; refresh: string}> {
+    public async login(@Body('email') email: string): Promise<{
+        access: string;
+        refresh: string;
+        user: {id: string; email: string};
+    }> {
         const user = await this.usersService.findOneByEmail(email);
-        return this.authService.generateTokens(user._id.toString());
+        const tokens = await this.authService.generateTokens(
+            user._id.toString()
+        );
+        return {
+            ...tokens,
+            user: {
+                id: user._id.toString(),
+                email: user.email,
+            },
+        };
     }
 
     @UseGuards(JwtRefreshAuthGuard)
