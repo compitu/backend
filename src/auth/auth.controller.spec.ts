@@ -55,10 +55,10 @@ describe('AuthController', () => {
     describe('register', () => {
         it('should create a new user', async () => {
             const createSpy = jest
-                .spyOn(authService, 'register')
+                .spyOn(authService, 'signup')
                 .mockResolvedValueOnce(mockUser);
 
-            await controller.register(createUserDto);
+            await controller.signup(createUserDto);
             expect(createSpy).toHaveBeenCalled();
         });
     });

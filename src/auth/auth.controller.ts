@@ -22,11 +22,11 @@ export class AuthController {
         public configService: ConfigService
     ) {}
 
-    @Post('register')
-    public async register(
+    @Post('signup')
+    public async signup(
         @Body() createUserDto: CreateUserDto
     ): Promise<UserResponse> {
-        const user = await this.authService.register(createUserDto);
+        const user = await this.authService.signup(createUserDto);
         return new UserResponse(user);
     }
 

@@ -12,7 +12,7 @@ export class AuthService {
         private tokenService: TokenService
     ) {}
 
-    public async register(createUserDto: CreateUserDto): Promise<User> {
+    public async signup(createUserDto: CreateUserDto): Promise<User> {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
         return this.usersService.create({
             ...createUserDto,
