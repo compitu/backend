@@ -4,8 +4,6 @@ import {AuthGuard} from '@nestjs/passport';
 @Injectable()
 export class JwtRefreshAuthGuard extends AuthGuard('jwt-refresh') {
     public handleRequest(err, user, info, context, status): any {
-        console.log(info);
-
         // If the refreshtoken is not valid return 403 instead of 401.
         if (
             err ||
