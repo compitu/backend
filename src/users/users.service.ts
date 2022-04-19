@@ -28,7 +28,12 @@ export class UsersService {
         }
 
         const user = await this.userModel.create(createUserDto);
-        this.logger.log(`A new user created: ${JSON.stringify(user)}`);
+        this.logger.log(
+            `A new user created: ${JSON.stringify({
+                id: user.id,
+                email: user.email,
+            })}`
+        );
         return user.toObject();
     }
 
